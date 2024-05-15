@@ -1,7 +1,7 @@
-@import url("https://use.fontawesome.com/releases/v5.10.2/css/all.css");
+@import url("https://use.fontawesome.com/releases/v6.1.0/css/all.css");
 
 body {
-    font-family: sans-serif;
+    font-family: proxima-nova, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 nav {
@@ -21,6 +21,7 @@ nav ul li {
 nav ul li a {
     text-decoration: none;
     color: #c83025;
+    cursor: pointer;
 }
 
 li a i {
@@ -36,14 +37,14 @@ p button {
     cursor: pointer;
 }
 
-.shopping {
+button.shopping {
     background-color: #83a94c;
 }
 
-.info {
+button.info {
     background-color: #008ed0;
 }
 
-.delete {
+button.delete {
     background-color: #cc4036;
 }
