@@ -1,9 +1,9 @@
-import { html } from "../node_modules/lit-html/lit-html.js"
-import { event } from "../utils/eventHandlers.js"
+import { html, nothing } from '../node_modules/lit-html/lit-html.js';
+import { event } from '../util/eventHandler.js';
 
 export function getRegisterTemplate() {
     return html`
-        <section id="register-page" class="content auth">
+    <section id="register-page" class="content auth">
             <form id="register" @submit=${event.onRegisterSubmit}>
                 <div class="container">
                     <div class="brand-logo"></div>
@@ -25,6 +25,9 @@ export function getRegisterTemplate() {
                     </p>
                 </div>
             </form>
-        </section>
-    `
+        </section>`;
 }
+
+
+
+

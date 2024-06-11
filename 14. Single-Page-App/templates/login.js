@@ -1,9 +1,9 @@
-import { html } from "../node_modules/lit-html/lit-html.js"
-import { event } from "../utils/eventHandlers.js"
+import { html, nothing } from '../node_modules/lit-html/lit-html.js';
+import { event } from '../util/eventHandler.js';
 
 export function getLoginTemplate() {
     return html`
-        <section id="login-page" class="auth">
+    <section id="login-page" class="auth">
             <form id="login" @submit=${event.onLoginSubmit}>
 
                 <div class="container">
@@ -22,3 +22,7 @@ export function getLoginTemplate() {
             </form>
         </section>`;
 }
+
+
+
+

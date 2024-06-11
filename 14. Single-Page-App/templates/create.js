@@ -1,5 +1,5 @@
 import { html, nothing } from '../node_modules/lit-html/lit-html.js';
-import { event } from '../utils/eventHandler.js'; 
+import { event } from '../util/eventHandler.js';
 
 export function getCreateView() {
     return html`

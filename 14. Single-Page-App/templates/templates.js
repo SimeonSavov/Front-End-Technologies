@@ -7,13 +7,12 @@ import { getCreateView } from "./create.js";
 import { getEditTemplate } from "./edit.js";
 import { getDetailsView } from "./details.js";
 
-
 export const templates = {
-    getHomeTemplate,
     getNavTemplate,
+    getHomeTemplate,
+    getCatalogTemplate,
     getLoginTemplate,
     getRegisterTemplate,
-    getCatalogTemplate,
     getCreateView,
     getEditTemplate,
     getDetailsView

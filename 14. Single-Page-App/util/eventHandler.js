@@ -1,9 +1,43 @@
-import page from "../node_modules/page/page.mjs"
-import { requests } from "../api/requests.js"
-import { userInfo } from "./userInfo.js";
+import page from '../node_modules/page/page.mjs'
+import { requests } from '../api/requests.js'
+import { userInfo } from '../util/userInfo.js'
+
+async function onCreateSubmit(evt) {
+
+    evt.preventDefault();
+
+    let formData = new FormData(evt.currentTarget);
+
+    let { title, category, maxLevel, imageUrl, summary } = Object.fromEntries(formData);
+
+    if (isValidCreatingOrEditing(title, category, maxLevel, imageUrl, summary)) {
+        let item = {
+            title,
+            category,
+            maxLevel,
+            imageUrl,
+            summary
+        };
+
+        requests.games.create(item)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Unable to create a game!')
+                }
+                return res.json();
+            })
+            .then(game => {
+                page.redirect('/');
+            })
+            .catch(err => alert(err.message));
+
+    } else {
+        alert("All fields are required!")
+    }
+}
 
 async function onLoginSubmit(evt) {
-
+    debugger;
     evt.preventDefault();
 
     let formData = new FormData(evt.currentTarget);
@@ -13,7 +47,7 @@ async function onLoginSubmit(evt) {
     await requests.user.login(email, password)
         .then(res => {
             if (!res.ok) {
-                throw new Error("Unable to login");
+                throw new Error('Unable to log in!');
             }
             return res.json();
         })
@@ -22,29 +56,32 @@ async function onLoginSubmit(evt) {
             page.redirect('/');
         })
         .catch(err => {
-            alert(err.message);
+            alert(err.message)
         })
+
+
+
 }
 
 async function onRegisterSubmit(evt) {
+    debugger;
     evt.preventDefault();
-
     let formData = new FormData(evt.currentTarget);
 
     let { email, password } = Object.fromEntries(formData);
 
-    let rePass = formData.get('confirm-password');
-    if (isValidRegister(email, password, rePass)) {
+    let repass = formData.get('confirm-password');
+
+    if (isValidRegister(email, password, repass)) {
         let userInfo = {
             email,
-            password,
-            rePass
+            password
         };
 
         requests.user.register(userInfo)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error("Regisration is not successfull!");
+                    throw new Error("Email already exists!");
                 }
                 return res.json();
             })
@@ -56,7 +93,7 @@ async function onRegisterSubmit(evt) {
                 alert(err.message);
             })
     } else {
-        alert('No empty fields are allowed and confirm password should match password!');
+        alert("No empty fields are allowed and confirm password has to match password!")
     }
 }
 
@@ -96,7 +133,7 @@ function onEditSubmit(evt) {
     }
 }
 
-function onCommentSubmit(evt){
+function onCommentSubmit(evt) {
     evt.preventDefault();
 
     let formData = new FormData(evt.currentTarget);
@@ -104,73 +141,38 @@ function onCommentSubmit(evt){
     let gameId = evt.currentTarget.getAttribute('gameid');
 
     let form = evt.currentTarget;
-    requests.comments.postNew({gameId, comment})
-    .then(res => {
-        if(!res.ok){
-            throw new Error('Unable to send comment');
-        }
-        return res.json();
-    })
-    .then(com => {
-        form.reset();
-        page.redirect(`/details/${gameId}`);
-    })
-    .catch(err => alert(err.message))
-}
-
-async function onCreateSubmit(evt) {
-
-    evt.preventDefault();
-
-    let formData = new FormData(evt.currentTarget);
-
-    let { title, category, maxLevel, imageUrl, summary } = Object.fromEntries(formData);
-
-    if (isValidCreatingOrEditing(title, category, maxLevel, imageUrl, summary)) {
-        let item = {
-            title,
-            category,
-            maxLevel,
-            imageUrl,
-            summary
-        };
-
-        requests.games.create(item)
+    requests.comments.postNew({ gameId, comment })
         .then(res => {
-            if(!res.ok){
-                throw new Error('Unable to create a game!')
+            if (!res.ok) {
+                throw new Error('Unable to send comment');
             }
             return res.json();
         })
-        .then(game => {
-            page.redirect('/');
+        .then(com => {
+            form.reset();
+            page.redirect(`/details/${gameId}`);
         })
-        .catch(err => alert(err.message));
-
-    } else {
-        alert("All fields are required!")
-    }
+        .catch(err => alert(err.message))
 }
 
-
 export const event = {
+    onCreateSubmit,
     onLoginSubmit,
     onRegisterSubmit,
     onEditSubmit,
-    onCommentSubmit,
-    onCreateSubmit
+    onCommentSubmit
 }
 
-function isValidRegister(email, password, rePass) {
-    if (email == '' || password == '' || password != rePass) {
+function isValidRegister(email, password, repass) {
+
+    if (email == '' || password == '' || repass == '' || password != repass) {
         return false;
     }
-
     return true;
 }
 
 function isValidCreatingOrEditing(title, category, maxLevel, imageUrl, summary) {
-    if(title == '' || category == '' || maxLevel == '' || imageUrl == '' || summary == ''){
+    if (title == '' || category == '' || maxLevel == '' || imageUrl == '' || summary == '') {
         return false
     }
     return true;
